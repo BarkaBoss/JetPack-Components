@@ -13,7 +13,7 @@ import ng.com.nokt.mealzapp.models.MealsRepository
 import ng.com.nokt.mealzapp.models.response.MealsCategoriesResponse
 import ng.com.nokt.mealzapp.models.response.MealsResponse
 
-class MealsCategoriesViewModel(private val repository: MealsRepository = MealsRepository()): ViewModel() {
+class MealsCategoriesViewModel(private val repository: MealsRepository = MealsRepository.getInstance()): ViewModel() {
 
 
     init {
