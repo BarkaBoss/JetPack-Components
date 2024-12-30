@@ -11,10 +11,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,61 +31,68 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import coil3.request.transformations
 import coil3.transform.CircleCropTransformation
 import ng.com.nokt.mealzapp.models.response.MealsResponse
+import java.lang.Float.min
 
 @Composable
 fun MealDetailsScreen(meal: MealsResponse?) {
-    var mealPictureState by remember {
-        mutableStateOf(MealItemProfileImage.Normal)
-    }
-    val transition = updateTransition(targetState = mealPictureState, label = "")
-    val imageSizeDp by transition.animateDp (targetValueByState = { it.size }, label = "")
-    val color by transition.animateColor(targetValueByState = { it.color }, label = "")
-    val borderWidth by transition.animateDp (targetValueByState = {it.borderWidth}, label = "")
-    Column {
-        Row {
-            Card(
-                modifier = Modifier.padding(16.dp),
-                shape = CircleShape,
-                border = BorderStroke(width = borderWidth, color = color)
-            ) {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(meal?.imageUrl)
-                        .crossfade(true)
-                        .transformations(CircleCropTransformation())
-                        .build(),
-                    contentDescription = "Meals Image",
-                    modifier = Modifier
-                        .size(imageSizeDp)
-                        .padding(8.dp)
-                )
-            }
-            Text(
-                meal?.name?: "default name",
-                modifier = Modifier
-                    .padding(16.dp)
-                    .align(Alignment.CenterVertically),
-                )
-        }
-        Button(
-            modifier = Modifier
-                .padding(top = 16.dp, end = 20.dp, start = 20.dp)
-                .fillMaxWidth()
-                .align(Alignment.CenterHorizontally),
-            onClick = {
-                mealPictureState = if (mealPictureState ==  MealItemProfileImage.Normal)
-                    MealItemProfileImage.Expanded
-                else
-                    MealItemProfileImage.Normal
-            }
+    val scrollState = rememberScrollState()
+    val offset = min(1f, 1 - (scrollState.value / 600f))
+    val size by animateDpAsState(targetValue = max(100.dp, 200.dp * offset))
+
+    Surface(
+        color = MaterialTheme.colorScheme.background,
         ) {
-            Text("Change state of meal profile picture")
+        Column(modifier = Modifier.padding(top = 15.dp)) {
+            Surface(shadowElevation = 4.dp) {
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Card(
+                        modifier = Modifier.padding(16.dp),
+                        shape = CircleShape,
+                        border = BorderStroke(
+                            width = 2.dp,
+                            color = Color.Green
+                        )
+                    ) {
+                        AsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(meal?.imageUrl)
+                                .crossfade(true)
+                                .transformations(CircleCropTransformation())
+                                .build(),
+                            contentDescription = "Meals Image",
+                            modifier = Modifier
+                                .size(size)
+                                .padding(4.dp)
+                        )
+
+                    }
+                    Text(
+                        text = meal?.name ?: "default name",
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .align(Alignment.CenterVertically)
+                    )
+                }
+            }
+            Column(modifier = Modifier.verticalScroll(scrollState)) {
+                Text("This is a text element", modifier = Modifier.padding(32.dp))
+                Text("This is a text element", modifier = Modifier.padding(32.dp))
+                Text("This is a text element", modifier = Modifier.padding(32.dp))
+                Text("This is a text element", modifier = Modifier.padding(32.dp))
+                Text("This is a text element", modifier = Modifier.padding(32.dp))
+                Text("This is a text element", modifier = Modifier.padding(32.dp))
+                Text("This is a text element", modifier = Modifier.padding(32.dp))
+                Text("This is a text element", modifier = Modifier.padding(32.dp))
+                Text("This is a text element", modifier = Modifier.padding(32.dp))
+                Text("This is a text element", modifier = Modifier.padding(32.dp))
+            }
         }
     }
 }
