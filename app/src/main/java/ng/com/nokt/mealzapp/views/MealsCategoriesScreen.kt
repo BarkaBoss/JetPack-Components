@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -59,7 +60,7 @@ fun MealsCategory(meal: MealsResponse, navigationCallback: (String) -> Unit){
         mutableStateOf(false)
     }
     Card(
-        shape = RoundedCornerShape(10.dp),
+        shape = CutCornerShape(topStart = 15.dp, bottomStart = 15.dp),
         elevation = CardDefaults.cardElevation(2.dp),
         modifier = Modifier
             .fillMaxWidth()
